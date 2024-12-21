@@ -1,48 +1,30 @@
-
 # Install Targets for yaml-cpp
-install(TARGETS yaml-cpp EXPORT PDFLibTargets)
+install(TARGETS yaml-cpp EXPORT PDFxTMDLibTargets)
 
-# Install PDFLib library
-install(TARGETS PDFLib 
-        EXPORT PDFLibTargets
+# Install PDFxTMDLib library
+install(TARGETS PDFxTMDLib_static PDFxTMDLib_shared
+        EXPORT PDFxTMDLibTargets
         ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
         LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
         RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
 
 # Install header files
-install(DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/PDFLib)
+install(DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/PDFxTMDLib)
 
 # Export targets for package config
-install(EXPORT PDFLibTargets
-        FILE PDFLibTargets.cmake
-        NAMESPACE PDFLib::
-        DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/PDFLib)
+install(EXPORT PDFxTMDLibTargets
+        FILE PDFxTMDLibTargets.cmake
+        NAMESPACE PDFxTMDLib::
+        DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/PDFxTMDLib)
 
-# Configure package config files
+# Configure package config file using the provided PDFxTMDLibConfig.cmake.in
 include(CMakePackageConfigHelpers)
 configure_package_config_file(
-    cmake/PDFLibConfig.cmake.in
-    ${CMAKE_CURRENT_BINARY_DIR}/PDFLibConfig.cmake
-    INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/PDFLib
+    ${CMAKE_SOURCE_DIR}/cmake/PDFxTMDLibConfig.cmake.in
+    ${CMAKE_CURRENT_BINARY_DIR}/PDFxTMDLibConfig.cmake
+    INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/PDFxTMDLib
 )
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/PDFLibConfig.cmake
-        DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/PDFLib)
 
-# Add uninstall target
-configure_file(${CMAKE_SOURCE_DIR}/cmake/uninstall.cmake 
-               ${CMAKE_CURRENT_BINARY_DIR}/cmake/uninstall.cmake 
-               COPYONLY)
-add_custom_target(uninstall
-    COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/cmake/uninstall.cmake
-    COMMENT "Uninstalling the project...")
-
-# CPack configuration
-set(CPACK_PACKAGE_VENDOR "Ramin Kord")
-set(CPACK_PACKAGE_CONTACT "raminkord92@gmail.com")
-set(CPACK_PACKAGE_DESCRIPTION "PDF library for Collinear PDFs and TMDs")
-include(CPack)
-
-set(CPACK_PACKAGE_VERSION_MAJOR ${PROJECT_VERSION_MAJOR})
-set(CPACK_PACKAGE_VERSION_MINOR ${PROJECT_VERSION_MINOR})
-set(CPACK_PACKAGE_VERSION_PATCH ${PROJECT_VERSION_PATCH})
-set(CPACK_PACKAGE_VERSION ${PROJECT_VERSION})
+# Install the generated config file
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/PDFxTMDLibConfig.cmake
+        DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/PDFxTMDLib)
